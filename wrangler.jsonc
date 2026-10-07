@@ -1,0 +1,13 @@
+{
+  // The Angular build is a static site: `ng build` emits a shell, one JS bundle
+  // and one stylesheet, and this Worker's only job is to serve them.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "stalactite-angular",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "./dist",
+    // The app is client-rendered, so unknown paths return the shell rather than
+    // a bare 404.
+    "not_found_handling": "single-page-application"
+  }
+}

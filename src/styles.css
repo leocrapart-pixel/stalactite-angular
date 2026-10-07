@@ -1,0 +1,59 @@
+:root {
+	color-scheme: dark;
+}
+* {
+	box-sizing: border-box;
+}
+html,
+body {
+	margin: 0;
+	padding: 0;
+	background: #05070a;
+}
+body {
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+/* Range inputs: keep the thumb readable on a dark panel. */
+input[type='range'] {
+	-webkit-appearance: none;
+	appearance: none;
+	background: transparent;
+	height: 18px;
+}
+input[type='range']::-webkit-slider-runnable-track {
+	height: 4px;
+	border-radius: 2px;
+	background: rgba(255, 255, 255, 0.12);
+}
+input[type='range']::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 14px;
+	height: 14px;
+	margin-top: -5px;
+	border-radius: 50%;
+	background: #e0b070;
+	border: 2px solid #0a0c10;
+	box-shadow: 0 0 0 1px rgba(224, 176, 112, 0.5);
+	cursor: pointer;
+}
+input[type='range']::-moz-range-track {
+	height: 4px;
+	border-radius: 2px;
+	background: rgba(255, 255, 255, 0.12);
+}
+input[type='range']::-moz-range-thumb {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: #e0b070;
+	border: 2px solid #0a0c10;
+	cursor: pointer;
+}
+button:hover {
+	filter: brightness(1.18);
+}
+button:active {
+	transform: translateY(1px);
+}
