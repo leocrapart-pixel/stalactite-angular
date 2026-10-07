@@ -215,12 +215,20 @@ export class App {
 
 	private readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('stage');
 
+	/**
+	 * The scene's authored width, in CSS pixels. The canvas fills its column and
+	 * this tracks the measured size, so the chamber is drawn at native resolution
+	 * instead of being stretched from a fixed 620 px.
+	 */
+	private readonly sceneW = signal(620);
+	private readonly sceneH = signal(720);
+
 	constructor() {
 		// The scene is a value, rebuilt whenever anything it depends on changes.
 		const scene = computed(() =>
 			Scene.draw({
-				w: 620,
-				h: 720,
+				w: this.sceneW(),
+				h: this.sceneH(),
 				env: this.env(),
 				sim: this.sim(),
 				time: this.clock(),
@@ -237,7 +245,33 @@ export class App {
 			if (el) draw(el, scene());
 		});
 
+		// Track the canvas box so the chamber is drawn at the size it is shown at.
+		// The height follows from a fixed aspect ratio rather than from the current
+		// width and height: deriving it from both would compound on every resize,
+		// because each measurement would use the ratio it had just changed.
+		const SCENE_ASPECT = this.sceneH() / this.sceneW();
+
+		effect((onCleanup) => {
+			const el = this.canvasRef()?.nativeElement;
+			if (!el) return;
+
+			const measure = () => {
+				const box = el.getBoundingClientRect();
+				const w = Math.max(320, Math.round(box.width));
+				if (w === this.sceneW()) return;
+				this.sceneW.set(w);
+				this.sceneH.set(Math.round(w * SCENE_ASPECT));
+			};
+
+			const observer = new ResizeObserver(measure);
+			observer.observe(el);
+			measure();
+			onCleanup(() => observer.disconnect());
+		});
+
 		const destroyRef = inject(DestroyRef);
+		this.installUrlSync();
+		this.installKeyboardShortcuts();
 		let raf = 0;
 		let last = performance.now();
 
@@ -298,6 +332,129 @@ export class App {
 			alpha: 0.25 + 0.6 * ((i + 1) / h.length)
 		}));
 	});
+
+	// --- shareable URL -------------------------------------------------------
+	//
+	// The whole scenario fits in a few numbers, so the hash carries it: a link
+	// reproduces the cave exactly, including how far the formation had grown.
+	// Nothing here touches the physics; it only reads and writes signals.
+
+	private static readonly HASH_KEY = 'c';
+
+	/** Serialise: env in a fixed order, then the run-level settings. */
+	private toHash(): string {
+		const e = this.env();
+		return [
+			e.tempC,
+			e.cavePCO2,
+			e.caIn,
+			e.dripRate,
+			e.wetness,
+			e.kineticK,
+			e.evaporation,
+			this.chamberM(),
+			this.speed(),
+			Math.round(this.sim().years),
+			this.running() ? 1 : 0,
+			this.showRings() ? 1 : 0
+		].join(',');
+	}
+
+	private fromHash(raw: string): boolean {
+		const parts = raw.split(',').map(Number);
+		if (parts.length !== 12 || parts.some((n) => !Number.isFinite(n))) return false;
+
+		const [tempC, cavePCO2, caIn, dripRate, wetness, kineticK, evaporation, chamberM, speed, years, running, rings] =
+			parts;
+
+		this.env.set({
+			tempC,
+			cavePCO2,
+			caIn,
+			dripRate,
+			wetness,
+			kineticK,
+			evaporation,
+			maxDepth: 1.6
+		});
+		this.chamberM.set(chamberM);
+		this.speed.set(speed);
+		this.running.set(running !== 0);
+		this.showRings.set(rings !== 0);
+		this.presetName.set('Custom');
+
+		// Rewind the formation to the shared length rather than replaying history:
+		// the shape is a pure function of the deposited volume, so seeding it
+		// directly gives the identical stalactite.
+		if (years > 0) {
+			this.sim.set(P.advance(P.defaultParams, this.env(), years, P.initialSim()));
+		}
+		return true;
+	}
+
+	private installUrlSync(): void {
+		const read = () => {
+			const hash = location.hash.replace(/^#/, '');
+			if (!hash) return;
+			const value = new URLSearchParams(hash).get(App.HASH_KEY);
+			if (value) this.fromHash(value);
+		};
+		read();
+		// Back/forward should restore the scenario the URL describes.
+		const onPop = () => read();
+		window.addEventListener('popstate', onPop);
+
+		// Write back on change. Replacing rather than pushing keeps the back button
+		// useful instead of filling history with every slider tick.
+		let raf = 0;
+		effect(() => {
+			const payload = this.toHash();
+			if (raf) cancelAnimationFrame(raf);
+			raf = requestAnimationFrame(() => {
+				const next = `#${App.HASH_KEY}=${payload}`;
+				if (location.hash !== next) history.replaceState(null, '', next);
+			});
+		});
+
+		inject(DestroyRef).onDestroy(() => {
+			window.removeEventListener('popstate', onPop);
+			if (raf) cancelAnimationFrame(raf);
+		});
+	}
+
+	// --- keyboard ------------------------------------------------------------
+
+	private installKeyboardShortcuts(): void {
+		const onKey = (event: KeyboardEvent) => {
+			const el = event.target as HTMLElement | null;
+			// Never steal keys from a control the user is operating.
+			if (el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
+
+			switch (event.key) {
+				case ' ':
+				case 'k':
+					event.preventDefault();
+					this.running.update((r) => !r);
+					break;
+				case 'r':
+					this.newStalactite();
+					break;
+				case 'y':
+					this.showRings.update((v) => !v);
+					break;
+				case 'ArrowRight':
+					event.preventDefault();
+					this.speed.update((s) => Math.min(s * 1.5, 2000000));
+					break;
+				case 'ArrowLeft':
+					event.preventDefault();
+					this.speed.update((s) => Math.max(s / 1.5, 1000));
+					break;
+			}
+		};
+		window.addEventListener('keydown', onKey);
+		inject(DestroyRef).onDestroy(() => window.removeEventListener('keydown', onKey));
+	}
 
 	// --- template helpers ----------------------------------------------------
 	//

@@ -51,6 +51,26 @@ Angular specifics worth noting:
 - **`OnPush`** on both components, and the two-way slider binding uses a signal
   `model()` input.
 
+## What this version adds
+
+The physics core is identical to the SvelteKit port's, so the three implementations
+show the same cave. These are Angular-side additions on top of that shared core:
+
+- **Shareable URLs.** The whole scenario — chemistry, chamber, time-lapse speed,
+  how far the formation has grown, whether it is running — fits in the hash, so a
+  link reproduces the cave exactly. The formation is restored by seeding the
+  deposited volume rather than replaying history, because the shape is a pure
+  function of that volume. The header shows `Custom` once a URL has overridden a
+  preset.
+- **Keyboard control.** `space` run/pause, `r` new stalactite, `y` year bands,
+  `←`/`→` time-lapse speed. Keys are ignored while a control has focus, so typing
+  in a field never triggers them.
+- **A responsive canvas.** The chamber is drawn at its measured size instead of
+  being stretched from a fixed 620 px, with the backing store scaled by the device
+  pixel ratio.
+- **The slenderness row** (`thickness ÷ length`) that the Elm version had and both
+  TypeScript ports were missing.
+
 ## The parity test
 
 `tests/physics.test.ts` compares this port against values emitted from the Elm

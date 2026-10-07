@@ -173,6 +173,13 @@
 							{{ p.blurb }}
 						</div>
 					}
+					<div
+						style="font:10px ui-sans-serif, system-ui, sans-serif;color:#5a6675;line-height:1.6;border-top:1px solid rgba(90,102,117,0.4);padding-top:8px;margin-top:4px"
+					>
+						<div><b style="color:#8b98a8">space</b> run / pause &nbsp; <b style="color:#8b98a8">r</b> new stalactite</div>
+						<div><b style="color:#8b98a8">y</b> year bands &nbsp; <b style="color:#8b98a8">← →</b> time-lapse speed</div>
+						<div style="margin-top:4px">The URL carries the whole scenario — copy it to share a cave.</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -181,12 +188,9 @@
 		<div
 			style="position:relative;flex:1 1 420px;min-width:320px;max-width:780px;border-radius:12px;overflow:hidden;border:1px solid #5a6675;background:#06080b"
 		>
-			<canvas
-				#stage
-				width="620"
-				height="720"
-				style="display:block;width:100%;height:auto"
-			></canvas>
+			<!-- Sized by the component: `draw` sets the backing store from the
+			     measured box and the device pixel ratio. -->
+			<canvas #stage style="display:block;width:100%;height:auto"></canvas>
 			<div
 				style="position:absolute;top:10px;left:14px;font:500 10px ui-monospace, monospace;letter-spacing:0.14em;text-transform:uppercase;color:#5a6675"
 			>
@@ -219,6 +223,17 @@
 					<div [style]="T.rowStyle">
 						<span style="color:#8b98a8">length</span>
 						<span [style]="T.rowValueStyle" style="color:#e8eef6">{{ round2(view().length * 100) }} cm</span>
+					</div>
+					<!--
+						Slenderness: the tip against the length. This is the number that
+						makes "long and thin" concrete, and it is the shape the calcium
+						budget actually supports.
+					-->
+					<div [style]="T.rowStyle">
+						<span style="color:#8b98a8">thickness ÷ length</span>
+						<span [style]="T.rowValueStyle" style="color:#8b98a8"
+							>{{ round2(view().apexRadius * 2000) }} mm per {{ round2(view().length * 100) }} cm</span
+						>
 					</div>
 					<div [style]="T.rowStyle">
 						<span style="color:#8b98a8">tip diameter</span>
