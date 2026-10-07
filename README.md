@@ -4,9 +4,10 @@ An Angular port of the Elm app in the parent directory. Same physics, same scene
 same instrument panel; the model is reproduced formula-for-formula and pinned to
 the Elm build by a parity test.
 
-Third implementation of the same thing, alongside
-[Elm](https://github.com/leocrapart-pixel/stalactite) and
-[SvelteKit](https://github.com/leocrapart-pixel/stalactite-svelte).
+One of four implementations of the same thing, alongside
+[Elm](https://github.com/leocrapart-pixel/stalactite),
+[SvelteKit](https://github.com/leocrapart-pixel/stalactite-svelte) and
+[Vue](https://github.com/leocrapart-pixel/stalactite-vue).
 
 ## Run it
 
@@ -116,8 +117,9 @@ version and documented in the [SvelteKit README](../svelte/README.md):
 ## Deployed
 
 Live at **https://stalactite-angular.stalactite.workers.dev**, alongside
-[Elm](https://stalactite.stalactite.workers.dev) and
-[SvelteKit](https://stalactite-svelte.stalactite.workers.dev).
+[Elm](https://stalactite.stalactite.workers.dev),
+[SvelteKit](https://stalactite-svelte.stalactite.workers.dev) and
+[Vue](https://stalactite-vue.stalactite.workers.dev).
 
 `wrangler.jsonc` deploys it as a Worker serving static assets, the same pattern
 as the other two, under its own name (`stalactite-angular`) so all three run side
