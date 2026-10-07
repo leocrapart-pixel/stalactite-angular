@@ -93,18 +93,26 @@ version and documented in the [SvelteKit README](../svelte/README.md):
 3. The grid span was unbounded, so growth past 1.28 m was invisible while the
    shape law still reported a longer formation.
 
-## Deploy
+## Deployed
+
+Live at **https://stalactite-angular.stalactite.workers.dev**, alongside
+[Elm](https://stalactite.stalactite.workers.dev) and
+[SvelteKit](https://stalactite-svelte.stalactite.workers.dev).
 
 `wrangler.jsonc` deploys it as a Worker serving static assets, the same pattern
-as the other two, under its own name (`stalactite-angular`) so all three can run
-side by side:
+as the other two, under its own name (`stalactite-angular`) so all three run side
+by side.
 
 ```sh
-export CLOUDFLARE_API_TOKEN=...
-export CLOUDFLARE_ACCOUNT_ID=...
+export CLOUDFLARE_API_TOKEN=...      # token with the "Edit Cloudflare Workers" template
+export CLOUDFLARE_ACCOUNT_ID=...     # `npx wrangler whoami` prints it
 npm run build && npx wrangler deploy
-node scripts/verify-deploy.mjs https://<your-url>   # confirm live == dist/
+npm run verify:deploy                # confirm live == dist/
 ```
+
+`verify:deploy` fetches the shell and every asset it references from the live
+site and compares them against `dist/`. It exists because "the deploy succeeded"
+and "the deploy is correct" are different claims.
 
 ## Caveats
 
