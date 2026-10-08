@@ -18,26 +18,26 @@
 			</div>
 		</div>
 		<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-			<span [style]="T.badgeStyle(T.water)">elapsed {{ T.formatYears(sim().years) }}</span>
-			<span [style]="T.badgeStyle(T.accent)">{{ presetName() }}</span>
-			<span [style]="T.badgeStyle(T.faint)">Angular</span>
+			<span [attr.style]="T.badgeStyle(T.water)">elapsed {{ T.formatYears(sim().years) }}</span>
+			<span [attr.style]="T.badgeStyle(T.accent)">{{ presetName() }}</span>
+			<span [attr.style]="T.badgeStyle(T.faint)">Angular</span>
 		</div>
 	</div>
 
 	<div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;justify-content:center">
 		<!-- left column: controls -->
 		<div style="width:312px;flex:0 0 312px;display:flex;flex-direction:column;gap:12px">
-			<div [style]="T.sheetStyle">
-				<div [style]="T.sectionStyle">
-					<div [style]="T.sectionTitleStyle">Run</div>
+			<div [attr.style]="T.sheetStyle">
+				<div [attr.style]="T.sectionStyle">
+					<div [attr.style]="T.sectionTitleStyle">Run</div>
 					<div style="display:flex;flex-wrap:wrap;gap:6px">
-						<button [style]="T.buttonStyle(running())" (click)="running.set(!running())">
+						<button [attr.style]="T.buttonStyle(running())" (click)="running.set(!running())">
 							{{ running() ? '❚❚  Pause' : '▶  Run' }}
 						</button>
-						<button [style]="T.buttonStyle(false)" (click)="newStalactite()">
+						<button [attr.style]="T.buttonStyle(false)" (click)="newStalactite()">
 							⟲  New stalactite
 						</button>
-						<button [style]="T.buttonStyle(showRings())" (click)="showRings.set(!showRings())">
+						<button [attr.style]="T.buttonStyle(showRings())" (click)="showRings.set(!showRings())">
 							≡  Years
 						</button>
 					</div>
@@ -63,8 +63,8 @@
 
 				<div style="height:1px;background:#5a6675;opacity:0.4;margin:2px 0"></div>
 
-				<div [style]="T.sectionStyle">
-					<div [style]="T.sectionTitleStyle">Water supply</div>
+				<div [attr.style]="T.sectionStyle">
+					<div [attr.style]="T.sectionTitleStyle">Water supply</div>
 					<app-slider
 						label="Drip rate"
 						[min]="0"
@@ -104,9 +104,9 @@
 				</div>
 			</div>
 
-			<div [style]="T.sheetStyle">
-				<div [style]="T.sectionStyle">
-					<div [style]="T.sectionTitleStyle">Water chemistry</div>
+			<div [attr.style]="T.sheetStyle">
+				<div [attr.style]="T.sectionStyle">
+					<div [attr.style]="T.sectionTitleStyle">Water chemistry</div>
 					<app-slider
 						label="Calcium in drip water"
 						[min]="0.2"
@@ -160,11 +160,11 @@
 				</div>
 			</div>
 
-			<div [style]="T.sheetStyle">
-				<div [style]="T.sectionStyle">
-					<div [style]="T.sectionTitleStyle">Cave analogues</div>
+			<div [attr.style]="T.sheetStyle">
+				<div [attr.style]="T.sectionStyle">
+					<div [attr.style]="T.sectionTitleStyle">Cave analogues</div>
 					@for (p of presets; track p.name) {
-						<button [style]="T.buttonStyle(p.name === presetName())" (click)="applyPreset(p)">
+						<button [attr.style]="T.buttonStyle(p.name === presetName())" (click)="applyPreset(p)">
 							{{ p.name }}
 						</button>
 						<div
@@ -205,65 +205,65 @@
 
 		<!-- right column: readouts -->
 		<div style="width:330px;flex:0 0 330px;display:flex;flex-direction:column;gap:12px">
-			<div [style]="T.sheetStyle">
-				<div [style]="T.sectionStyle">
-					<div [style]="T.sectionTitleStyle">Growth</div>
-					<div [style]="T.rowStyle">
+			<div [attr.style]="T.sheetStyle">
+				<div [attr.style]="T.sectionStyle">
+					<div [attr.style]="T.sectionTitleStyle">Growth</div>
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">tip advance</span>
-						<span [style]="T.rowValueStyle" [style.color]="warning() ? T.warn : T.accent">{{
+						<span [attr.style]="T.rowValueColoured(warning() ? T.warn : T.accent)">{{
 							T.formatRate(view().tipGrowthMmPerYear)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">wall thickening</span>
-						<span [style]="T.rowValueStyle" style="color:#e8eef6">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#e8eef6">{{
 							T.formatRate(view().wallGrowthMmPerYear)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">length</span>
-						<span [style]="T.rowValueStyle" style="color:#e8eef6">{{ round2(view().length * 100) }} cm</span>
+						<span [attr.style]="T.rowValueStyle" style="color:#e8eef6">{{ round2(view().length * 100) }} cm</span>
 					</div>
 					<!--
 						Slenderness: the tip against the length. This is the number that
 						makes "long and thin" concrete, and it is the shape the calcium
 						budget actually supports.
 					-->
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">thickness ÷ length</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8"
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8"
 							>{{ round2(view().apexRadius * 2000) }} mm per {{ round2(view().length * 100) }} cm</span
 						>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">tip diameter</span>
-						<span [style]="T.rowValueStyle" style="color:#e8eef6">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#e8eef6">{{
 							round3(view().apexRadius * 2000)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">calcite deposited</span>
-						<span [style]="T.rowValueStyle" style="color:#e8eef6">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#e8eef6">{{
 							T.formatMass(view().massGrams)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">surface area</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8">{{
 							round3(view().surfaceAreaM2 * 1.0e4)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">elapsed</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8">{{ T.formatYears(sim().years) }}</span>
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8">{{ T.formatYears(sim().years) }}</span>
 					</div>
 					@if (warning()) {
-						<div [style]="T.hintStyle">
+						<div [attr.style]="T.hintStyle">
 							⚠ The drip water is at or below calcite equilibrium for this cave air, so nothing
 							can precipitate. Raise the calcium or lower the CO₂.
 						</div>
 					} @else {
-						<div [style]="T.hintStyle">
+						<div [attr.style]="T.hintStyle">
 							The tip advances at γ times the wall thickening, because a fixed taper means the
 							whole profile grows together.
 						</div>
@@ -271,46 +271,46 @@
 				</div>
 			</div>
 
-			<div [style]="T.sheetStyle">
-				<div [style]="T.sectionStyle">
-					<div [style]="T.sectionTitleStyle">Water film</div>
-					<div [style]="T.rowStyle">
+			<div [attr.style]="T.sheetStyle">
+				<div [attr.style]="T.sectionStyle">
+					<div [attr.style]="T.sectionTitleStyle">Water film</div>
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">thickness</span>
-						<span [style]="T.rowValueStyle" style="color:#6fb3d8">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#6fb3d8">{{
 							round2(view().filmMicrons)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">downslope speed</span>
-						<span [style]="T.rowValueStyle" style="color:#6fb3d8">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#6fb3d8">{{
 							round3(view().filmVelocityMmS)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">wetted perimeter</span>
-						<span [style]="T.rowValueStyle" style="color:#6fb3d8">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#6fb3d8">{{
 							round3(view().wettedPerimeterMm)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">CO₂ degassing time</span>
-						<span [style]="T.rowValueStyle" style="color:#6fb3d8">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#6fb3d8">{{
 							T.formatSeconds(view().degasSeconds)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">film residence time</span>
-						<span [style]="T.rowValueStyle" style="color:#6fb3d8">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#6fb3d8">{{
 							T.formatSeconds(view().residenceSeconds)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">Reynolds number</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8">{{
 							T.formatSmall(view().reynolds)
 						}}</span>
 					</div>
-					<div [style]="T.hintStyle">
+					<div [attr.style]="T.hintStyle">
 						{{
 							view().degasSeconds < view().residenceSeconds
 								? 'The film sheds its CO₂ long before it leaves the surface, so the water finishes the climb close to equilibrium.'
@@ -320,32 +320,32 @@
 				</div>
 			</div>
 
-			<div [style]="T.sheetStyle">
-				<div [style]="T.sectionStyle">
-					<div [style]="T.sectionTitleStyle">Chemistry</div>
-					<div [style]="T.rowStyle">
+			<div [attr.style]="T.sheetStyle">
+				<div [attr.style]="T.sectionStyle">
+					<div [attr.style]="T.sectionTitleStyle">Chemistry</div>
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">calcium arriving</span>
-						<span [style]="T.rowValueStyle" style="color:#79c98a">{{ round2(view().caIn) }}</span>
+						<span [attr.style]="T.rowValueStyle" style="color:#79c98a">{{ round2(view().caIn) }}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">at equilibrium with cave air</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8">{{ round3(view().caEq) }}</span>
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8">{{ round3(view().caEq) }}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">excess at the tip</span>
-						<span [style]="T.rowValueStyle" style="color:#e0b070">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#e0b070">{{
 							round3(view().apexExcess)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">saturation index</span>
-						<span [style]="T.rowValueStyle" [style.color]="warning() ? T.warn : T.ok">{{
+						<span [attr.style]="T.rowValueColoured(warning() ? T.warn : T.ok)">{{
 							round2(view().saturationIndex)
 						}}</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">depletion length L = Q / kP</span>
-						<span [style]="T.rowValueStyle" style="color:#e0b070">{{
+						<span [attr.style]="T.rowValueStyle" style="color:#e0b070">{{
 							round2(view().depletionLengthM)
 						}}</span>
 					</div>
@@ -355,22 +355,22 @@
 							[style.width]="pct(view().apexExcess / 5)"
 						></div>
 					</div>
-					<div [style]="T.hintStyle">
+					<div [attr.style]="T.hintStyle">
 						{{
 							view().depletionLengthM > view().length * 1.5
 								? 'L is longer than the formation, so the film still carries excess calcium when it reaches the tip: the whole surface grows, and the tip runs ahead.'
 								: 'L is shorter than the formation, so most of the calcium is spent near the ceiling and the lower shaft starves.'
 						}}
 					</div>
-					<div [style]="T.hintStyle">
+					<div [attr.style]="T.hintStyle">
 						SI = log₁₀(Ca / Ca_eq). Cave drip waters run from about 0.3 to 1.2.
 					</div>
 				</div>
 			</div>
 
-			<div [style]="T.sheetStyle">
-				<div [style]="T.sectionStyle">
-					<div [style]="T.sectionTitleStyle">Growth curve</div>
+			<div [attr.style]="T.sheetStyle">
+				<div [attr.style]="T.sectionStyle">
+					<div [attr.style]="T.sectionTitleStyle">Growth curve</div>
 					<div
 						style="position:relative;height:92px;border-left:1px solid #5a6675;border-bottom:1px solid #5a6675;margin-top:2px"
 					>
@@ -391,41 +391,41 @@
 							{{ round2(chartYMax()) }} mm
 						</div>
 					</div>
-					<div [style]="T.hintStyle">
+					<div [attr.style]="T.hintStyle">
 						Tip diameter against elapsed time. The curve flattens as the widening tip spreads the
 						same water over more surface.
 					</div>
 				</div>
 			</div>
 
-			<div [style]="T.sheetStyle">
-				<div [style]="T.sectionStyle">
-					<div [style]="T.sectionTitleStyle">What the model solves</div>
-					<div [style]="T.rowStyle">
+			<div [attr.style]="T.sheetStyle">
+				<div [attr.style]="T.sectionStyle">
+					<div [attr.style]="T.sectionTitleStyle">What the model solves</div>
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">supply</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8">q from the drip rate</span>
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8">q from the drip rate</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">film</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8">Nusselt  h ∝ (νq/gP)^⅓</span>
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8">Nusselt  h ∝ (νq/gP)^⅓</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">degassing</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8">k = D/h²</span>
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8">k = D/h²</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">chemistry</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8">carbonate system, bisected</span>
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8">carbonate system, bisected</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">deposition</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8">R = k(c − c_eq)</span>
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8">R = k(c − c_eq)</span>
 					</div>
-					<div [style]="T.rowStyle">
+					<div [attr.style]="T.rowStyle">
 						<span style="color:#8b98a8">shape</span>
-						<span [style]="T.rowValueStyle" style="color:#8b98a8">cone, L from deposited V</span>
+						<span [attr.style]="T.rowValueStyle" style="color:#8b98a8">cone, L from deposited V</span>
 					</div>
-					<div [style]="T.hintStyle">
+					<div [attr.style]="T.hintStyle">
 						Equilibrium calcium is solved from the full carbonate system by geometric bisection.
 						160 nodes along the surface, 8 mm apart.
 					</div>

@@ -9,17 +9,15 @@
     "watch": "ng build --watch --configuration development",
     "test": "tsx tests/physics.test.ts && tsx tests/render.test.ts",
     "verify:deploy": "node scripts/verify-deploy.mjs",
-    "deploy": "ng build && wrangler deploy"
+    "deploy": "ng build && wrangler deploy",
+    "size": "node scripts/size.mjs"
   },
   "dependencies": {
     "@angular/common": "^22.0.0",
     "@angular/compiler": "^22.0.0",
     "@angular/core": "^22.0.0",
-    "@angular/forms": "^22.0.0",
     "@angular/platform-browser": "^22.0.0",
-    "rxjs": "^7.8.1",
-    "tslib": "^2.8.1",
-    "zone.js": "^0.16.0"
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@angular/build": "^22.0.0",

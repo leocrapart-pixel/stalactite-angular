@@ -28,9 +28,18 @@
             "production": {
               "budgets": [
                 {
+                  // Angular's default of 500 kB sits far above what this app
+                  // actually weighs (about 168 kB raw, 50 kB on the wire), so
+                  // it would never fire. The ceiling is set just above the real
+                  // figure to catch a regression rather than to permit one.
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "180kB",
+                  "maximumError": "220kB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
               ],
               "outputHashing": "all"

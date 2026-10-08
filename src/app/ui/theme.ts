@@ -49,6 +49,13 @@ export const rowStyle = [
 
 export const rowValueStyle = 'font-weight:600;text-align:right';
 
+/** The row-value style with an explicit colour, as one string.
+ *
+ * Two bindings on the same element — `[attr.style]` for the base and
+ * `[style.color]` for the tint — fight each other, so the colour is folded
+ * into the same value instead. */
+export const rowValueColoured = (colour: string) => rowValueStyle + ';color:' + colour;
+
 export const sliderLabelStyle = [
 	'display:flex',
 	'justify-content:space-between',
